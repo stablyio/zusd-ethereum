@@ -8,7 +8,7 @@ This document outlines the business requirements of the ZUSD smart contracts.
 
 # Business Overview
 
-ZUSD is an asset backed stablecoin. It will be jointly managed by 3 parties, a gold dealer (the Dealer), a trust (the Trust), and a technology provider (Stably). Each party will help in the administration of the token as well provide checks and balances to ensure proper collateralization of ZUSD at all times.
+ZUSD is a USD backed stablecoin. It will be jointly managed by 3 parties, Zytara (the Admin), Prime Trust (the Trust), and the technology provider (Stably). Each party will help in the administration of the token as well provide checks and balances to ensure proper collateralization of ZUSD at all times.
 
 # Functionality
 
@@ -16,9 +16,9 @@ There are 4 components of the ZUSD system. There is the ERC20 token (the Token I
 
 ## Owner
 
-The Owner which acts as the administrator for the other smart contracts will be an existing battle-tested multisig wallet implementation from Gnosis: https://github.com/Gnosis/MultiSigWallet
+The Owner which acts as the administrator for the other smart contracts will be an existing battle-tested smart contract multisig wallet (possibly from Gnosis: https://github.com/Gnosis/MultiSigWallet)
 
-The Owner will have at least 3 parties, the Dealer, the Trust, and Stably. Any transactions taken by the owner will require at least 2 of 3 approval. The threshold may be increased if more participants are added.
+The Owner will have at least 3 parties, the Admin, the Trust, and Stably. Any transactions taken by the owner will require at least 2 of 3 approval. The threshold may be increased if more participants are added.
 
 ## Proxy
 
