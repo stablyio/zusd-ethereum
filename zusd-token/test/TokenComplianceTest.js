@@ -1,18 +1,16 @@
 const ZUSDContract = artifacts.require("ZUSDImplementation.sol");
-const Proxy = artifacts.require("ZUSDProxy.sol");
 
 const assertRevert = require("./helpers/assertRevert");
 const { ZERO_ADDRESS } = require("openzeppelin-test-helpers").constants;
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 // Tests that ZUSD compliance capabilities function correctly.
 contract(
   "ZUSD regulatory compliance",
-  function ([_, admin, complianceRole, otherAddress, freezableAddress, owner]) {
+  function ([owner, complianceRole, otherAddress, freezableAddress]) {
     beforeEach(async function () {
-      const ZUSD = await ZUSDContract.new({ from: owner });
-      const proxy = await Proxy.new(ZUSD.address, admin, { from: admin });
-      const proxiedZUSD = await ZUSDContract.at(proxy.address);
-      await proxiedZUSD.initialize({ from: owner });
+      // Assumes the first address passed is the caller, in this case `owner`
+      const proxiedZUSD = await deployProxy(ZUSDContract);
       this.token = proxiedZUSD;
     });
 
@@ -301,11 +299,12 @@ contract(
           });
 
           it("emits an WipeFrozenAddress event", async function () {
-            const {
-              logs,
-            } = await this.token.wipeFrozenAddress(freezableAddress, {
-              from: complianceRole,
-            });
+            const { logs } = await this.token.wipeFrozenAddress(
+              freezableAddress,
+              {
+                from: complianceRole,
+              }
+            );
 
             assert.equal(logs.length, 3);
             assert.equal(logs[0].event, "Burn");

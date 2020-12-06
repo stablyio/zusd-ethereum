@@ -1,19 +1,17 @@
 const ZUSDContract = artifacts.require("ZUSDImplementation.sol");
-const Proxy = artifacts.require("ZUSDProxy.sol");
 
 const assertRevert = require("./helpers/assertRevert");
 const {
   ZERO_ADDRESS,
   MAX_UINT256,
 } = require("openzeppelin-test-helpers").constants;
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 // Tests that ZUSD token issuance mechanisms operate correctly.
-contract("ZUSD issue", function ([_, admin, newIssuer, otherAddress, owner]) {
+contract("ZUSD issue", function ([owner, newIssuer, otherAddress]) {
   beforeEach(async function () {
-    const ZUSD = await ZUSDContract.new({ from: owner });
-    const proxy = await Proxy.new(ZUSD.address, admin, { from: admin });
-    const proxiedZUSD = await ZUSDContract.at(proxy.address);
-    await proxiedZUSD.initialize({ from: owner });
+    // Assumes the first address passed is the caller, in this case `owner`
+    const proxiedZUSD = await deployProxy(ZUSDContract);
     this.token = proxiedZUSD;
   });
 
@@ -35,7 +33,9 @@ contract("ZUSD issue", function ([_, admin, newIssuer, otherAddress, owner]) {
       });
 
       it("balances should be zero", async function () {
-        const ownerBalance = await this.token.balanceOf(owner, { from: owner });
+        const ownerBalance = await this.token.balanceOf(owner, {
+          from: owner,
+        });
         assert.equal(ownerBalance, 0);
         const otherBalance = await this.token.balanceOf(otherAddress, {
           from: owner,

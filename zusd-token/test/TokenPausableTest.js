@@ -1,16 +1,14 @@
-const ZUSDMock = artifacts.require("ZUSDWithBalance.sol");
-const Proxy = artifacts.require("ZUSDProxy.sol");
+const ZUSDContract = artifacts.require("ZUSDImplementation.sol");
 
 const assertRevert = require("./helpers/assertRevert");
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 // Test that ZUSD operates correctly as a Pausable token.
-contract("ZUSD pause", function ([_, admin, anotherAccount, owner]) {
+contract("ZUSD pause", function ([owner, anotherAccount]) {
   beforeEach(async function () {
-    const ZUSD = await ZUSDMock.new({ from: owner });
-    const proxy = await Proxy.new(ZUSD.address, admin, { from: admin });
-    const proxiedZUSD = await ZUSDMock.at(proxy.address);
-    await proxiedZUSD.initialize({ from: owner });
-    await proxiedZUSD.initializeBalance(owner, 100);
+    // Assumes the first address passed is the caller, in this case `owner`
+    const proxiedZUSD = await deployProxy(ZUSDContract);
+    await proxiedZUSD.mintTo(owner, 100);
     this.token = proxiedZUSD;
   });
 

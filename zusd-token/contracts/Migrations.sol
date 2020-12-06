@@ -1,15 +1,22 @@
-pragma solidity 0.7.5;
-
-// This is used for truffle migrations / testing.
+pragma solidity 0.6.0;
 
 contract Migrations {
+    address public owner;
     uint256 public last_completed_migration;
 
-    function setCompleted(uint256 completed) public {
+    modifier restricted() {
+        if (msg.sender == owner) _;
+    }
+
+    constructor() public {
+        owner = msg.sender;
+    }
+
+    function setCompleted(uint256 completed) public restricted {
         last_completed_migration = completed;
     }
 
-    function upgrade(address new_address) public {
+    function upgrade(address new_address) public restricted {
         Migrations upgraded = Migrations(new_address);
         upgraded.setCompleted(last_completed_migration);
     }

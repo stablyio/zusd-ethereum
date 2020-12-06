@@ -1,5 +1,6 @@
+const { deployProxy, admin } = require("@openzeppelin/truffle-upgrades");
+
 const ZUSD = artifacts.require("ZUSDImplementation");
-const Proxy = artifacts.require("ZUSDProxy");
 const Issuer = artifacts.require("ZUSDIssuer");
 
 // Note: Proxy owner must be DIFFERENT than any other owner
@@ -8,13 +9,8 @@ const TOKEN_OWNER = "0x3C0D0CD54775b279729f2B6069bba35E180f5d95"; // Ropsten pla
 const ISSUER_OWNER = "0x3C0D0CD54775b279729f2B6069bba35E180f5d95"; // Ropsten placeholders
 const ISSUANCE_WAIT_BLOCKS = 4;
 
-module.exports = async function (deployer) {
-  await deployer;
-
-  await deployer.deploy(ZUSD);
-  const proxy = await deployer.deploy(Proxy, ZUSD.address, PROXY_OWNER);
-  const proxiedZUSD = await ZUSD.at(proxy.address);
-  await proxiedZUSD.initialize();
+module.exports = async function(deployer) {
+  const proxiedZUSD = await deployProxy(ZUSD, { deployer });
   await proxiedZUSD.proposeOwner(TOKEN_OWNER);
   const issuer = await deployer.deploy(
     Issuer,
@@ -23,4 +19,5 @@ module.exports = async function (deployer) {
   );
   await issuer.proposeOwner(ISSUER_OWNER);
   await proxiedZUSD.setIssuer(issuer.address);
+  await admin.transferProxyAdminOwnership(PROXY_OWNER);
 };

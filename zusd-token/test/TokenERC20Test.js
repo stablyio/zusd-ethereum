@@ -1,17 +1,15 @@
-const ZUSDMock = artifacts.require("ZUSDWithBalance.sol");
-const Proxy = artifacts.require("ZUSDProxy.sol");
+const ZUSDContract = artifacts.require("ZUSDImplementation.sol");
 
 const assertRevert = require("./helpers/assertRevert");
 const { ZERO_ADDRESS } = require("openzeppelin-test-helpers").constants;
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 // Test that ZUSD operates correctly as an ERC20 token.
-contract("ZUSD ERC20", function ([_, admin, recipient, anotherAccount, owner]) {
+contract("ZUSD ERC20", function ([owner, recipient, anotherAccount]) {
   beforeEach(async function () {
-    const ZUSD = await ZUSDMock.new({ from: owner });
-    const proxy = await Proxy.new(ZUSD.address, admin, { from: admin });
-    const proxiedZUSD = await ZUSDMock.at(proxy.address);
-    await proxiedZUSD.initialize({ from: owner });
-    await proxiedZUSD.initializeBalance(owner, 100);
+    // Assumes the first address passed is the caller, in this case `owner`
+    const proxiedZUSD = await deployProxy(ZUSDContract);
+    await proxiedZUSD.mintTo(owner, 100);
     this.token = proxiedZUSD;
   });
 

@@ -1,4 +1,4 @@
-var HDWalletProvider = require("truffle-hdwallet-provider");
+var HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonic = "";
 const walletChildNum = 0;
 const ropstenNetworkURL =
@@ -14,6 +14,12 @@ module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
   networks: {
+    development: {
+      host: "127.0.0.1",
+      port: 8545,
+      network_id: "*", // Match any network id
+      disableConfirmationListener: true, // Workaround to avoid issue with excessive eth_getBlockByNumber calls: https://github.com/trufflesuite/truffle/issues/3471 https://github.com/trufflesuite/truffle/issues/3522 https://github.com/trufflesuite/truffle/issues/2688
+    },
     local: {
       host: "127.0.0.1",
       network_id: "*",
@@ -21,16 +27,9 @@ module.exports = {
       gas: 6700000,
       gasPrice: 0x01,
     },
-    coverage: {
-      host: "localhost",
-      network_id: "*",
-      port: 8555,
-      gas: 10000000000000,
-      gasPrice: 0x01,
-    },
     ropsten: {
       network_id: 3,
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(devPrivateKey, ropstenNetworkURL);
       },
       // ropsten block limit
@@ -41,7 +40,7 @@ module.exports = {
     },
     mainnet: {
       network_id: 1,
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(
           mnemonic,
           mainnetNetworkURL,
@@ -52,7 +51,7 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: "v0.7.5",
+      version: "v0.6.0",
     },
   },
   solc: {

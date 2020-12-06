@@ -1,6 +1,6 @@
-pragma solidity 0.7.5;
+pragma solidity 0.6.0;
 
-import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "contracts/ZUSDImplementation.sol";
 
 /**
@@ -185,7 +185,7 @@ contract ZUSDIssuer {
      * @dev Creates a mint proposal that must wait _mintWaitBlocks blocks before it can be executed.
      * @param to The recipient of the minted tokens.
      * @param value The number of tokens to mint.
-     * @return A uint256 that represents the index of the mint proposal.
+     * Returns a uint256 that represents the index of the mint proposal.
      */
     function proposeMint(address to, uint256 value)
         public
@@ -207,7 +207,7 @@ contract ZUSDIssuer {
     /**
      * @dev Executes a mint proposal that has waited sufficient blocks.
      * @param index The index of the _pendingMints to execute.
-     * @return A boolean that indicates if the operation was successful.
+     * Returns a boolean that indicates if the operation was successful.
      */
     function sendMint(uint256 index) public onlyMember returns (bool success) {
         require(
@@ -229,7 +229,7 @@ contract ZUSDIssuer {
      * @dev Deletes the mint proposal, can be called by any issuer on any mint proposal, provides a check
      * and balance on token minting.
      * @param index The index of the _pendingMints to delete.
-     * @return A boolean that indicates if the operation was successful.
+     * Returns a boolean that indicates if the operation was successful.
      */
     function rejectMint(uint256 index)
         public

@@ -1,0 +1,197 @@
+{
+  "manifestVersion": "3.1",
+  "impls": {
+    "752c1dc11c201670b2b41b985b3bb04a51babc9f86b10abe49257236fece9887": {
+      "address": "0xd555dB079EE5538D54F374e4a02163A576472E1E",
+      "txHash": "0x83ae65383dea1dce61ac1e58733e6e4733907a37837b9d19dbe002fb14f31349",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts/proxy/Initializable.sol:24"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts/proxy/Initializable.sol:29"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "ZUSDImplementation.sol:38"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "ZUSDImplementation.sol:39"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "ZUSDImplementation.sol:40"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:43"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_proposedOwner",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:44"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "ZUSDImplementation.sol:47"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_complianceRole",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:50"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_frozen",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "ZUSDImplementation.sol:51"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_issuer",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:54"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          }
+        }
+      }
+    },
+    "089d854e2add28ec62fd38ff3f7617b1679928c72b20e2988dec41f130a6f43e": {
+      "address": "0x8D99505c55488FC74A467238ffb162fC00B65906",
+      "txHash": "0x3e4daa3077b5243f492aa657e0ad9f39923f40e38b39300d9a7cfec6f5d05aed",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts/proxy/Initializable.sol:24"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts/proxy/Initializable.sol:29"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "ZUSDImplementation.sol:40"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "ZUSDImplementation.sol:41"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "ZUSDImplementation.sol:42"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:45"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_proposedOwner",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:46"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "ZUSDImplementation.sol:49"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_complianceRole",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:52"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_frozen",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "ZUSDImplementation.sol:53"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_issuer",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:56"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          }
+        }
+      }
+    }
+  },
+  "admin": {
+    "address": "0x2d5b336dfFBd90D7577D2B521cCED734890DB80D",
+    "txHash": "0x0548b3a1c4bb30d2e878432f04c2ae8e1a87011067f5fae163f2b62f90c34e5d"
+  }
+}
