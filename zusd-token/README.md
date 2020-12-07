@@ -16,15 +16,13 @@ There are 4 components of the ZUSD system. There is the ERC20 token (the Token I
 
 ## Owner
 
-The Owner which acts as the administrator for the other smart contracts will be an existing battle-tested smart contract multisig wallet (possibly from Gnosis: https://github.com/Gnosis/MultiSigWallet)
+The Owner which acts as the administrator for the other smart contracts will be an existing battle-tested smart contract multisig wallet (such as the Gnosis multisig or Gnosis safe).
 
 The Owner will have at least 3 parties, the Admin, the Trust, and Stably. Any transactions taken by the owner will require at least 2 of 3 approval. The threshold may be increased if more participants are added.
 
 ## Proxy
 
-We use the proxy pattern to provide upgradeability for ZUSD. Our implementation is based on OpenZeppelin’s [AdminUpgradeabilityProxy.sol](https://github.com/OpenZeppelin/openzeppelin-sdk/blob/71c9ad77e0326db079e6a643eca8568ab316d4a9/packages/lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol) implementation and uses the OpenZeppelin npm package ["@openzeppelin/upgrades": "^2.5.3"](https://www.npmjs.com/package/@openzeppelin/upgrades/v/2.5.3)
-**npm integrity checksum:**
-sha512-3tF3CCcfXb1OsCVjlv7v694pGdO+ssJddgDYI+K6AwUdAmxafaHSaftCFQ5BRmdpHKCxzAYrc2SSLHZpLpXl2g==
+We use the proxy pattern to provide upgradeability for ZUSD. Our implementation uses OpenZeppelin’s tooling and implementation. See ["The OpenZeppelin site"](https://docs.openzeppelin.com/openzeppelin/) for more information.
 
 ## Token Implementation
 
@@ -37,9 +35,7 @@ ZUSD implements the ERC20 standard via custom token logic that enables the follo
 - Pausable
 - Regulatory Compliance
 
-We use SafeMath and the ERC-20 interface from the OpenZeppelin npm package ["@openzeppelin/contracts-ethereum-package": "^2.2.3"](https://www.npmjs.com/package/@openzeppelin/contracts-ethereum-package/v/2.2.3) which implements OpenZeppelin’s core audited smart contracts with upgradeability in mind.
-**npm integrity checksum:**
-sha512-SPg7ac3w9E5yXITHXxhjTpDWrfYjiNJ66hqeIvygf841QPlC02oEB1F/kZFqEKl/5AvXNpSMKiBuCP13CGjChQ==
+We use SafeMath and other supplementary smart contracts from the OpenZeppelin's npm packages (see package.json for specific versions).
 
 ### ERC20
 
