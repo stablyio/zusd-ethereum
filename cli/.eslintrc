@@ -1,0 +1,9 @@
+{
+  "extends": ["oclif", "oclif-typescript", "prettier"],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "new-cap": [2, { "capIsNewExceptions": ["BigInt"] }],
+    "no-useless-constructor": "off"
+  },
+  "plugins": ["prettier"]
+}
