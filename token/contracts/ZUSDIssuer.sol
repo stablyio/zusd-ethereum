@@ -1,7 +1,7 @@
 pragma solidity 0.6.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "contracts/ZUSDImplementation.sol";
+import "../contracts/ZUSDImplementation.sol"; // Workaround Truffle duplicate artifacts different paths issues
 
 /**
  * @title ZUSDIssuer

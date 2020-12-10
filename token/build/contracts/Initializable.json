@@ -255,10 +255,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3181,
-                        3182
+                        2071,
+                        2072
                       ],
-                      "referencedDeclaration": 3182,
+                      "referencedDeclaration": 2072,
                       "src": "1464:7:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -627,7 +627,7 @@
                         "name": "this",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3198,
+                        "referencedDeclaration": 2088,
                         "src": "2348:4:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_Initializable_$1984",
@@ -1140,10 +1140,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3181,
-                        3182
+                        2071,
+                        2072
                       ],
-                      "referencedDeclaration": 3182,
+                      "referencedDeclaration": 2072,
                       "src": "1464:7:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1512,7 +1512,7 @@
                         "name": "this",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3198,
+                        "referencedDeclaration": 2088,
                         "src": "2348:4:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_Initializable_$1984",
@@ -1784,7 +1784,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-12-03T08:21:31.996Z",
+  "updatedAt": "2020-12-10T07:19:59.935Z",
   "devdoc": {
     "details": "This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed behind a proxy. Since a proxied contract can't have a constructor, it's common to move constructor logic to an external initializer function, usually called `initialize`. It then becomes necessary to protect this initializer function so it can only be called once. The {initializer} modifier provided by this contract will have this effect.  * TIP: To avoid leaving the proxy in an uninitialized state, the initializer function should be called as early as possible by providing the encoded function call as the `_data` argument to {UpgradeableProxy-constructor}.  * CAUTION: When used with inheritance, manual care must be taken to not invoke a parent initializer twice, or to ensure that all initializers are idempotent. This is not verified automatically as constructors are by Solidity.",
     "methods": {}

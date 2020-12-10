@@ -1,0 +1,103 @@
+{
+  "manifestVersion": "3.1",
+  "impls": {
+    "752c1dc11c201670b2b41b985b3bb04a51babc9f86b10abe49257236fece9887": {
+      "address": "0x2243a94Ff9E10148640cE516B16Fb917699F393A",
+      "txHash": "0x617c95e68714d547435c290b47426773a5936000f8996939dd3ff29a06e73f7f",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts/proxy/Initializable.sol:24"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts/proxy/Initializable.sol:29"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "ZUSDImplementation.sol:38"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "ZUSDImplementation.sol:39"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "ZUSDImplementation.sol:40"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:43"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_proposedOwner",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:44"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "ZUSDImplementation.sol:47"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_complianceRole",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:50"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_frozen",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "ZUSDImplementation.sol:51"
+          },
+          {
+            "contract": "ZUSDImplementation",
+            "label": "_issuer",
+            "type": "t_address",
+            "src": "ZUSDImplementation.sol:54"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          }
+        }
+      }
+    }
+  },
+  "admin": {
+    "address": "0xd5D6A32f559AfA8a62403fDA97719C35889AfB1D",
+    "txHash": "0x8280bb12ab343a94174a4bb5f6a795bc1bb37ddbec512c19c5137c1d71ff070e"
+  }
+}
