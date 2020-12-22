@@ -14,23 +14,20 @@ contract ZUSDIssuer {
     using SafeMath for uint256;
 
     // IMPLEMENTATION
-    ZUSDImplementation internal _implementation;
+    ZUSDImplementation public implementation;
     event ImplementationChange(
         address oldImplementation,
         address newImplementation
     );
 
-    // CONSTANTS
-    uint8 internal constant _maxMembers = 255;
-
     // MEMBERSHIP DATA
     mapping(address => bool) internal _members;
-    uint8 internal _numMembers;
+    uint256 public numMembers;
     event AddMember(address indexed member);
     event RemoveMember(address indexed member);
 
     // WAIT TIME
-    uint256 internal _mintWaitBlocks;
+    uint256 public mintWaitBlocks;
     event MintWaitBlocksUpdated(
         uint256 oldMintWaitBlocks,
         uint256 newMintWaitBlocks
@@ -45,14 +42,14 @@ contract ZUSDIssuer {
     // NOTE: pendingMints is public and will generate a getter automatically
     // Current solidity version does not support returning structs so we fall back to this
     mapping(uint256 => PendingMint) public pendingMints;
-    uint256 internal _pendingMintsIndex;
+    uint256 public pendingMintsIndex;
     event MintProposed(address indexed proposer, uint256 pendingMintsIndex);
     event MintSent(address indexed sender, uint256 pendingMintsIndex);
     event MintRejected(address indexed sender, uint256 pendingMintsIndex);
 
     // OWNER
-    address internal _owner;
-    address internal _proposedOwner;
+    address public owner;
+    address public proposedOwner;
     event OwnershipTransferProposed(
         address indexed currentOwner,
         address indexed proposedOwner
@@ -68,34 +65,29 @@ contract ZUSDIssuer {
     constructor(address initialImplementation, uint256 initialMintWaitBlocks)
         public
     {
-        _numMembers = 0;
-        _mintWaitBlocks = initialMintWaitBlocks;
-        _pendingMintsIndex = 0;
-        _owner = msg.sender;
-        _proposedOwner = address(0);
-
-        setImplementation(initialImplementation);
+        numMembers = 0;
+        mintWaitBlocks = initialMintWaitBlocks;
+        pendingMintsIndex = 0;
+        owner = msg.sender;
+        proposedOwner = address(0);
+        implementation = ZUSDImplementation(initialImplementation);
     }
 
     // IMPLEMENTATION LOGIC
 
     /**
-     * @return The address of the implementation.
-     */
-    function implementation() public view returns (address) {
-        return address(_implementation);
-    }
-
-    /**
      * @dev Sets the implementation contract address.
      * @param implementationAddress The address of the implementation to point to.
      */
-    function setImplementation(address implementationAddress) public onlyOwner {
+    function setImplementation(address implementationAddress)
+        external
+        onlyOwner
+    {
         emit ImplementationChange(
-            address(_implementation),
+            address(implementation),
             implementationAddress
         );
-        _implementation = ZUSDImplementation(implementationAddress);
+        implementation = ZUSDImplementation(implementationAddress);
     }
 
     // MEMBERSHIP LOGIC
@@ -104,40 +96,26 @@ contract ZUSDIssuer {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyMember() {
-        require(isMember(msg.sender), "onlyMember");
+        require(_members[msg.sender], "onlyMember");
         _;
     }
 
     /**
      * @return Whether the address is a member.
      */
-    function isMember(address addr) public view returns (bool) {
+    function isMember(address addr) external view returns (bool) {
         return _members[addr];
-    }
-
-    /**
-     * @return The maximum members allowed.
-     */
-    function maxMembers() public pure returns (uint8) {
-        return _maxMembers;
-    }
-
-    /**
-     * @return The current number of members.
-     */
-    function numMembers() public view returns (uint8) {
-        return _numMembers;
     }
 
     /**
      * @dev Adds a new member.
      * @param addr The address to add.
      */
-    function addMember(address addr) public onlyOwner {
-        require(_numMembers <= _maxMembers, "exceeds the membership limit");
+    function addMember(address addr) external onlyOwner {
         require(_members[addr] == false, "already a member");
         _members[addr] = true;
-        _numMembers += 1;
+        numMembers = numMembers.add(1);
+
         emit AddMember(addr);
     }
 
@@ -145,29 +123,22 @@ contract ZUSDIssuer {
      * @dev Removes an existing member.
      * @param addr The address to remove.
      */
-    function removeMember(address addr) public onlyOwner {
+    function removeMember(address addr) external onlyOwner {
         require(_members[addr] == true, "not a member");
         _members[addr] = false;
-        _numMembers -= 1;
+        numMembers = numMembers.sub(1);
         emit RemoveMember(addr);
     }
 
     // WAIT TIME
 
-    /**
-     * @return The minimum number of blocks a pending mint must wait before it can be sent.
-     */
-    function mintWaitBlocks() public view returns (uint256) {
-        return _mintWaitBlocks;
-    }
-
     function setMintWaitBlocks(uint256 newMintWaitBlocks)
-        public
+        external
         onlyOwner
         returns (bool)
     {
-        emit MintWaitBlocksUpdated(_mintWaitBlocks, newMintWaitBlocks);
-        _mintWaitBlocks = newMintWaitBlocks;
+        emit MintWaitBlocksUpdated(mintWaitBlocks, newMintWaitBlocks);
+        mintWaitBlocks = newMintWaitBlocks;
 
         return true;
     }
@@ -175,31 +146,25 @@ contract ZUSDIssuer {
     // MINT FUNCTIONALITY
 
     /**
-     * @return The index of the next new pending mint.
-     */
-    function pendingMintsIndex() public view returns (uint256) {
-        return _pendingMintsIndex;
-    }
-
-    /**
-     * @dev Creates a mint proposal that must wait _mintWaitBlocks blocks before it can be executed.
+     * @dev Creates a mint proposal that must wait mintWaitBlocks blocks before it can be executed.
+     * Note that mintWaitBlocks can be zero to allow for no-wait mints.
      * @param to The recipient of the minted tokens.
      * @param value The number of tokens to mint.
      * Returns a uint256 that represents the index of the mint proposal.
      */
     function proposeMint(address to, uint256 value)
-        public
+        external
         onlyMember
-        returns (uint256 index)
+        returns (uint256)
     {
-        pendingMints[_pendingMintsIndex] = PendingMint(
+        pendingMints[pendingMintsIndex] = PendingMint(
             to,
             value,
-            block.number + _mintWaitBlocks
+            block.number + mintWaitBlocks
         );
-        emit MintProposed(msg.sender, _pendingMintsIndex);
-        uint256 proposedIndex = _pendingMintsIndex;
-        _pendingMintsIndex += 1;
+        emit MintProposed(msg.sender, pendingMintsIndex);
+        uint256 proposedIndex = pendingMintsIndex;
+        pendingMintsIndex = pendingMintsIndex.add(1);
 
         return proposedIndex;
     }
@@ -209,20 +174,24 @@ contract ZUSDIssuer {
      * @param index The index of the _pendingMints to execute.
      * Returns a boolean that indicates if the operation was successful.
      */
-    function sendMint(uint256 index) public onlyMember returns (bool success) {
+    function sendMint(uint256 index) external onlyMember returns (bool) {
         require(
             block.number >= pendingMints[index].canMintAtBlock,
             "cannot send mint until sufficient blocks have passed"
         );
 
-        _implementation.mintTo(
+        bool success = implementation.mintTo(
             pendingMints[index].recipient,
             pendingMints[index].value
+        );
+        require(
+            success,
+            "sending proposed mint got failure from implementation"
         );
         emit MintSent(msg.sender, index);
         delete pendingMints[index];
 
-        return true;
+        return success;
     }
 
     /**
@@ -231,11 +200,7 @@ contract ZUSDIssuer {
      * @param index The index of the _pendingMints to delete.
      * Returns a boolean that indicates if the operation was successful.
      */
-    function rejectMint(uint256 index)
-        public
-        onlyMember
-        returns (bool success)
-    {
+    function rejectMint(uint256 index) external onlyMember returns (bool) {
         require(
             pendingMints[index].value > 0,
             "this pending mint does not exist"
@@ -253,66 +218,52 @@ contract ZUSDIssuer {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
-        require(msg.sender == _owner, "onlyOwner");
+        require(msg.sender == owner, "onlyOwner");
         _;
-    }
-
-    /**
-     * @dev Current owner
-     */
-    function owner() public view returns (address) {
-        return _owner;
-    }
-
-    /**
-     * @dev Proposed new owner
-     */
-    function proposedOwner() public view returns (address) {
-        return _proposedOwner;
     }
 
     /**
      * @dev Allows the current owner to begin transferring control of the contract to a proposedOwner
      * @param newProposedOwner The address to transfer ownership to.
      */
-    function proposeOwner(address newProposedOwner) public onlyOwner {
+    function proposeOwner(address newProposedOwner) external onlyOwner {
         require(
             newProposedOwner != address(0),
             "cannot transfer ownership to address zero"
         );
         require(msg.sender != newProposedOwner, "caller already is owner");
 
-        _proposedOwner = newProposedOwner;
-        emit OwnershipTransferProposed(_owner, _proposedOwner);
+        proposedOwner = newProposedOwner;
+        emit OwnershipTransferProposed(owner, proposedOwner);
     }
 
     /**
      * @dev Allows the current owner or proposed owner to cancel transferring control of the contract to a proposedOwner
      */
-    function disregardProposeOwner() public {
+    function disregardProposeOwner() external {
         require(
-            msg.sender == _proposedOwner || msg.sender == _owner,
+            msg.sender == proposedOwner || msg.sender == owner,
             "only proposedOwner or owner"
         );
         require(
-            _proposedOwner != address(0),
+            proposedOwner != address(0),
             "can only disregard a proposed owner that was previously set"
         );
 
-        address oldProposedOwner = _proposedOwner;
-        _proposedOwner = address(0);
+        address oldProposedOwner = proposedOwner;
+        proposedOwner = address(0);
         emit OwnershipTransferDisregarded(oldProposedOwner);
     }
 
     /**
      * @dev Allows the proposed owner to complete transferring control of the contract to the proposedOwner.
      */
-    function claimOwnership() public {
-        require(msg.sender == _proposedOwner, "onlyProposedOwner");
+    function claimOwnership() external {
+        require(msg.sender == proposedOwner, "onlyProposedOwner");
 
-        address oldOwner = _owner;
-        _owner = _proposedOwner;
-        _proposedOwner = address(0);
-        emit OwnershipTransferred(oldOwner, _owner);
+        address oldOwner = owner;
+        owner = proposedOwner;
+        proposedOwner = address(0);
+        emit OwnershipTransferred(oldOwner, owner);
     }
 }

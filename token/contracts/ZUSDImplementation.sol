@@ -30,28 +30,28 @@ contract ZUSDImplementation is IERC20, Initializable {
      */
 
     // ERC20 CONSTANT DETAILS
-    string internal constant _name = "Zytara USD";
-    string internal constant _symbol = "ZUSD";
-    uint8 internal constant _decimals = 6;
+    string public constant name = "Zytara USD";
+    string public constant symbol = "ZUSD";
+    uint8 public constant decimals = 6;
 
     // ERC20 DATA
     mapping(address => uint256) internal _balances;
-    uint256 internal _totalSupply;
+    uint256 public override totalSupply;
     mapping(address => mapping(address => uint256)) internal _allowances;
 
     // OWNER DATA
-    address internal _owner;
-    address internal _proposedOwner;
+    address public owner;
+    address public proposedOwner;
 
     // PAUSABILITY DATA
-    bool internal _paused;
+    bool public paused;
 
     // COMPLIANCE DATA
-    address internal _complianceRole;
+    address public complianceRole;
     mapping(address => bool) internal _frozen;
 
     // ISSUER DATA
-    address internal _issuer;
+    address public issuer;
 
     /**
      * EVENTS
@@ -106,43 +106,15 @@ contract ZUSDImplementation is IERC20, Initializable {
      * memory model of the Implementation contract.
      */
     function initialize() public initializer {
-        _owner = msg.sender;
-        _proposedOwner = address(0);
-        _complianceRole = address(0);
-        _totalSupply = 0;
-        _issuer = msg.sender;
-        _paused = false;
+        owner = msg.sender;
+        proposedOwner = address(0);
+        complianceRole = address(0);
+        totalSupply = 0;
+        issuer = msg.sender;
+        paused = false;
     }
 
     // ERC20 FUNCTIONALITY
-
-    /**
-     * @return The name of the token.
-     */
-    function name() external pure returns (string memory) {
-        return _name;
-    }
-
-    /**
-     * @return The symbol of the token.
-     */
-    function symbol() external pure returns (string memory) {
-        return _symbol;
-    }
-
-    /**
-     * @return The number of decimals of the token.
-     */
-    function decimals() external pure returns (uint8) {
-        return _decimals;
-    }
-
-    /**
-     * @return The total number of tokens in existence
-     */
-    function totalSupply() external override view returns (uint256) {
-        return _totalSupply;
-    }
 
     /**
      * @dev Gets the balance of the specified address.
@@ -180,11 +152,6 @@ contract ZUSDImplementation is IERC20, Initializable {
         address to,
         uint256 value
     ) external override whenNotPaused returns (bool) {
-        require(
-            value <= _allowances[from][msg.sender],
-            "insufficient allowance"
-        );
-
         _allowances[from][msg.sender] = _allowances[from][msg.sender].sub(
             value
         );
@@ -296,7 +263,6 @@ contract ZUSDImplementation is IERC20, Initializable {
     ) internal {
         require(to != address(0), "cannot transfer to address zero");
         require(!_frozen[from] && !_frozen[to], "address frozen");
-        require(value <= _balances[from], "insufficient funds");
 
         _balances[from] = _balances[from].sub(value);
         _balances[to] = _balances[to].add(value);
@@ -309,22 +275,8 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
-        require(msg.sender == _owner, "onlyOwner");
+        require(msg.sender == owner, "onlyOwner");
         _;
-    }
-
-    /**
-     * @dev Current owner
-     */
-    function owner() external view returns (address) {
-        return _owner;
-    }
-
-    /**
-     * @dev Proposed new owner
-     */
-    function proposedOwner() external view returns (address) {
-        return _proposedOwner;
     }
 
     /**
@@ -338,8 +290,8 @@ contract ZUSDImplementation is IERC20, Initializable {
         );
         require(msg.sender != newProposedOwner, "caller already is owner");
 
-        _proposedOwner = newProposedOwner;
-        emit OwnershipTransferProposed(_owner, _proposedOwner);
+        proposedOwner = newProposedOwner;
+        emit OwnershipTransferProposed(owner, proposedOwner);
     }
 
     /**
@@ -347,16 +299,16 @@ contract ZUSDImplementation is IERC20, Initializable {
      */
     function disregardProposeOwner() external {
         require(
-            msg.sender == _proposedOwner || msg.sender == _owner,
+            msg.sender == proposedOwner || msg.sender == owner,
             "only proposedOwner or owner"
         );
         require(
-            _proposedOwner != address(0),
+            proposedOwner != address(0),
             "can only disregard a proposed owner that was previously set"
         );
 
-        address oldProposedOwner = _proposedOwner;
-        _proposedOwner = address(0);
+        address oldProposedOwner = proposedOwner;
+        proposedOwner = address(0);
         emit OwnershipTransferDisregarded(oldProposedOwner);
     }
 
@@ -364,28 +316,21 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @dev Allows the proposed owner to complete transferring control of the contract to the proposedOwner.
      */
     function claimOwnership() external {
-        require(msg.sender == _proposedOwner, "onlyProposedOwner");
+        require(msg.sender == proposedOwner, "onlyProposedOwner");
 
-        address oldOwner = _owner;
-        _owner = _proposedOwner;
-        _proposedOwner = address(0);
-        emit OwnershipTransferred(oldOwner, _owner);
+        address oldOwner = owner;
+        owner = proposedOwner;
+        proposedOwner = address(0);
+        emit OwnershipTransferred(oldOwner, owner);
     }
 
     // PAUSABILITY FUNCTIONALITY
 
     /**
-     * @dev Pause status
-     */
-    function paused() external view returns (bool) {
-        return _paused;
-    }
-
-    /**
-     * @dev Modifier to make a function callable only when the contract is not _paused.
+     * @dev Modifier to make a function callable only when the contract is not paused.
      */
     modifier whenNotPaused() {
-        require(!_paused, "whenNotPaused");
+        require(!paused, "whenNotPaused");
         _;
     }
 
@@ -393,9 +338,9 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @dev called by the owner to pause, triggers stopped state
      */
     function pause() external onlyOwner {
-        require(!_paused, "already _paused");
+        require(!paused, "already paused");
 
-        _paused = true;
+        paused = true;
         emit Pause();
     }
 
@@ -403,20 +348,13 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @dev called by the owner to unpause, returns to normal state
      */
     function unpause() external onlyOwner {
-        require(_paused, "already un_paused");
+        require(paused, "already unpaused");
 
-        _paused = false;
+        paused = false;
         emit Unpause();
     }
 
     // COMPLIANCE FUNCTIONALITY
-
-    /**
-     * @dev Current compliance role
-     */
-    function complianceRole() external view returns (address) {
-        return _complianceRole;
-    }
 
     /**
      * @dev Gets the frozen status of the specified address.
@@ -433,16 +371,16 @@ contract ZUSDImplementation is IERC20, Initializable {
      */
     function setComplianceRole(address newComplianceRole) external {
         require(
-            msg.sender == _complianceRole || msg.sender == _owner,
+            msg.sender == complianceRole || msg.sender == owner,
             "only complianceRole or Owner"
         );
 
-        emit ComplianceRoleSet(_complianceRole, newComplianceRole);
-        _complianceRole = newComplianceRole;
+        emit ComplianceRoleSet(complianceRole, newComplianceRole);
+        complianceRole = newComplianceRole;
     }
 
     modifier onlyComplianceRole() {
-        require(msg.sender == _complianceRole, "onlyComplianceRole");
+        require(msg.sender == complianceRole, "onlyComplianceRole");
         _;
     }
 
@@ -484,24 +422,17 @@ contract ZUSDImplementation is IERC20, Initializable {
     // ISSUER FUNCTIONALITY
 
     /**
-     * @dev Current issuer
-     */
-    function issuer() external view returns (address) {
-        return _issuer;
-    }
-
-    /**
      * @dev Sets a new issuer address.
      * @param newIssuer The address allowed to mint tokens to control supply.
      */
     function setIssuer(address newIssuer) external onlyOwner {
         require(newIssuer != address(0), "cannot set issuer to address zero");
-        emit IssuerSet(_issuer, newIssuer);
-        _issuer = newIssuer;
+        emit IssuerSet(issuer, newIssuer);
+        issuer = newIssuer;
     }
 
     modifier onlyIssuer() {
-        require(msg.sender == _issuer, "onlyIssuer");
+        require(msg.sender == issuer, "onlyIssuer");
         _;
     }
 
@@ -511,7 +442,7 @@ contract ZUSDImplementation is IERC20, Initializable {
      * Returns a boolean that indicates if the operation was successful.
      */
     function mint(uint256 value) external onlyIssuer returns (bool success) {
-        _mint(_issuer, value);
+        _mint(issuer, value);
 
         return true;
     }
@@ -524,7 +455,7 @@ contract ZUSDImplementation is IERC20, Initializable {
     function mintTo(address to, uint256 value)
         external
         onlyIssuer
-        returns (bool success)
+        returns (bool)
     {
         _mint(to, value);
 
@@ -546,7 +477,7 @@ contract ZUSDImplementation is IERC20, Initializable {
         require(to != address(0), "cannot mint to address zero");
         require(!_frozen[to], "address frozen");
 
-        _totalSupply = _totalSupply.add(value);
+        totalSupply = totalSupply.add(value);
         _balances[to] = _balances[to].add(value);
         emit Mint(to, value);
         emit Transfer(address(0), to, value);
@@ -557,9 +488,8 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @param value The number of tokens to remove.
      * Returns a boolean that indicates if the operation was successful.
      */
-    function burn(uint256 value) external returns (bool success) {
+    function burn(uint256 value) external returns (bool) {
         require(!_frozen[msg.sender], "address frozen");
-        require(value <= _balances[msg.sender], "insufficient funds");
         _burn(msg.sender, value);
 
         return true;
@@ -570,16 +500,8 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @param value The number of tokens to remove.
      * Returns a boolean that indicates if the operation was successful.
      */
-    function burnFrom(address from, uint256 value)
-        external
-        returns (bool success)
-    {
+    function burnFrom(address from, uint256 value) external returns (bool) {
         require(!_frozen[from] && !_frozen[msg.sender], "address frozen");
-        require(value <= _balances[from], "insufficient funds");
-        require(
-            value <= _allowances[from][msg.sender],
-            "insufficient allowance"
-        );
         _burn(from, value);
         _allowances[from][msg.sender] = _allowances[from][msg.sender].sub(
             value
@@ -595,7 +517,7 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @param value The amount that will be burnt.
      */
     function _burn(address addr, uint256 value) internal {
-        _totalSupply = _totalSupply.sub(value);
+        totalSupply = totalSupply.sub(value);
         _balances[addr] = _balances[addr].sub(value);
         emit Burn(addr, value);
         emit Transfer(addr, address(0), value);
