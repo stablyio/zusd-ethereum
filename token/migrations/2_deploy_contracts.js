@@ -3,7 +3,7 @@ const { deployProxy, admin } = require("@openzeppelin/truffle-upgrades");
 const ZUSD = artifacts.require("ZUSDImplementation");
 const Issuer = artifacts.require("ZUSDIssuer");
 
-const OWNER_MULTISIG_ADDRESS = "Fill me in";
+const OWNER_MULTISIG_ADDRESS = "0x20CdBBD54931BA79A79ab9BA23634134629Ac9C9"; // Just a test address
 
 const ISSUANCE_WAIT_BLOCKS = 4;
 

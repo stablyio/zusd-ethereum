@@ -5,8 +5,8 @@ const assertRevert = require("./helpers/assertRevert");
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 // Test that the Issuer operates correctly as Ownable.
-contract("Issuer membership", function ([owner, member1, member2, notmember]) {
-  beforeEach(async function () {
+contract("Issuer membership", function([owner, member1, member2, notmember]) {
+  beforeEach(async function() {
     // Assumes the first address passed is the caller, in this case `owner`
     const proxiedZUSD = await deployProxy(ZUSDContract);
     this.token = proxiedZUSD;
@@ -17,8 +17,8 @@ contract("Issuer membership", function ([owner, member1, member2, notmember]) {
     this.issuer = issuer;
   });
 
-  describe("when the caller is the owner", function () {
-    it("adds new member", async function () {
+  describe("when the caller is the owner", function() {
+    it("adds new member", async function() {
       const noMembers = await this.issuer.numMembers();
       let membership1 = await this.issuer.isMember(member1);
       let membership2 = await this.issuer.isMember(member2);
@@ -48,7 +48,7 @@ contract("Issuer membership", function ([owner, member1, member2, notmember]) {
       assert.equal(membership2, true);
     });
 
-    it("removes existing member", async function () {
+    it("removes existing member", async function() {
       await this.issuer.addMember(member1, { from: owner });
       await this.issuer.addMember(member2, { from: owner });
 
@@ -66,26 +66,34 @@ contract("Issuer membership", function ([owner, member1, member2, notmember]) {
       assert.equal(membership2, false);
     });
 
-    it("cannot add existing member", async function () {
+    it("cannot add existing member", async function() {
       await this.issuer.addMember(member1, { from: owner });
       await assertRevert(this.issuer.addMember(member1, { from: owner }));
     });
 
-    it("cannot remove non-member", async function () {
+    it("cannot remove non-member", async function() {
       await assertRevert(this.issuer.removeMember(member1, { from: owner }));
     });
 
-    it("cannot add members beyond limit", async function () {
+    it("cannot add members beyond limit", async function() {
       var addresses = [];
       // Fill up the member slots
       for (var i = 0; i < 255; i++) {
         addresses.push(
           "0x" +
             (
-              Math.random().toString(16).substring(2, 15) +
-              Math.random().toString(16).substring(2, 15) +
-              Math.random().toString(16).substring(2, 15) +
-              Math.random().toString(16).substring(2, 15)
+              Math.random()
+                .toString(16)
+                .substring(2, 15) +
+              Math.random()
+                .toString(16)
+                .substring(2, 15) +
+              Math.random()
+                .toString(16)
+                .substring(2, 15) +
+              Math.random()
+                .toString(16)
+                .substring(2, 15)
             ).substring(0, 40)
         );
       }
@@ -99,27 +107,27 @@ contract("Issuer membership", function ([owner, member1, member2, notmember]) {
     });
   });
 
-  describe("when the caller is not the owner", function () {
-    beforeEach(async function () {
+  describe("when the caller is not the owner", function() {
+    beforeEach(async function() {
       await this.issuer.addMember(member1, { from: owner });
     });
 
-    describe("when the caller is a member", function () {
-      it("should not add new member", async function () {
+    describe("when the caller is a member", function() {
+      it("should not add new member", async function() {
         await assertRevert(this.issuer.addMember(member2, { from: member1 }));
       });
 
-      it("should not remove existing member", async function () {
+      it("should not remove existing member", async function() {
         await assertRevert(this.issuer.addMember(member1, { from: member1 }));
       });
     });
 
-    describe("when the caller is not a member", function () {
-      it("should not add new member", async function () {
+    describe("when the caller is not a member", function() {
+      it("should not add new member", async function() {
         await assertRevert(this.issuer.addMember(member2, { from: notmember }));
       });
 
-      it("should not remove existing member", async function () {
+      it("should not remove existing member", async function() {
         await assertRevert(this.issuer.addMember(member1, { from: notmember }));
       });
     });

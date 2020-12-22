@@ -29,7 +29,7 @@ module.exports = {
     },
     ropsten: {
       network_id: 3,
-      provider: function () {
+      provider: function() {
         return new HDWalletProvider(devPrivateKey, ropstenNetworkURL);
       },
       // ropsten block limit
@@ -40,7 +40,7 @@ module.exports = {
     },
     mainnet: {
       network_id: 1,
-      provider: function () {
+      provider: function() {
         return new HDWalletProvider(
           mnemonic,
           mainnetNetworkURL,
