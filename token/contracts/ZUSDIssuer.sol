@@ -160,7 +160,7 @@ contract ZUSDIssuer {
         pendingMints[pendingMintsIndex] = PendingMint(
             to,
             value,
-            block.number + mintWaitBlocks
+            mintWaitBlocks.add(block.number)
         );
         emit MintProposed(msg.sender, pendingMintsIndex);
         uint256 proposedIndex = pendingMintsIndex;
@@ -180,10 +180,12 @@ contract ZUSDIssuer {
             "cannot send mint until sufficient blocks have passed"
         );
 
-        bool success = implementation.mintTo(
-            pendingMints[index].recipient,
-            pendingMints[index].value
-        );
+        bool success =
+            implementation.mintTo(
+                pendingMints[index].recipient,
+                pendingMints[index].value
+            );
+
         require(
             success,
             "sending proposed mint got failure from implementation"

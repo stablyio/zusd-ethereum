@@ -121,7 +121,7 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @param addr The address to query the the balance of.
      * Returns a uint256 representing the amount owned by the passed address.
      */
-    function balanceOf(address addr) external override view returns (uint256) {
+    function balanceOf(address addr) external view override returns (uint256) {
         return _balances[addr];
     }
 
@@ -222,38 +222,38 @@ contract ZUSDImplementation is IERC20, Initializable {
 
     /**
      * @dev Approve an address to spend another addresses' tokens.
-     * @param owner The address that owns the tokens.
+     * @param _owner The address that owns the tokens.
      * @param spender The address that will spend the tokens.
      * @param value The number of tokens that can be spent.
      */
     function _approve(
-        address owner,
+        address _owner,
         address spender,
         uint256 value
     ) internal {
-        require(!_frozen[owner] && !_frozen[spender], "address frozen");
+        require(!_frozen[_owner] && !_frozen[spender], "address frozen");
         require(
             spender != address(0),
             "cannot approve allowance for zero address"
         );
 
-        _allowances[owner][spender] = value;
-        emit Approval(owner, spender, value);
+        _allowances[_owner][spender] = value;
+        emit Approval(_owner, spender, value);
     }
 
     /**
      * @dev Function to check the amount of tokens that an owner allowed to a spender.
-     * @param owner address The address which owns the funds.
+     * @param _owner address The address which owns the funds.
      * @param spender address The address which will spend the funds.
      * Returns a uint256 specifying the amount of tokens still available for the spender.
      */
-    function allowance(address owner, address spender)
+    function allowance(address _owner, address spender)
         external
-        override
         view
+        override
         returns (uint256)
     {
-        return _allowances[owner][spender];
+        return _allowances[_owner][spender];
     }
 
     function _transfer(
