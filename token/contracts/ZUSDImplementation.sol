@@ -172,7 +172,6 @@ contract ZUSDImplementation is IERC20, Initializable {
     function approve(address spender, uint256 value)
         external
         override
-        whenNotPaused
         returns (bool)
     {
         _approve(msg.sender, spender, value);
@@ -441,7 +440,12 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @param value The number of tokens to add.
      * Returns a boolean that indicates if the operation was successful.
      */
-    function mint(uint256 value) external onlyIssuer returns (bool success) {
+    function mint(uint256 value)
+        external
+        onlyIssuer
+        whenNotPaused
+        returns (bool success)
+    {
         _mint(issuer, value);
 
         return true;
@@ -455,6 +459,7 @@ contract ZUSDImplementation is IERC20, Initializable {
     function mintTo(address to, uint256 value)
         external
         onlyIssuer
+        whenNotPaused
         returns (bool)
     {
         _mint(to, value);
@@ -469,11 +474,7 @@ contract ZUSDImplementation is IERC20, Initializable {
      * @param to The account that will receive the created tokens.
      * @param value The amount that will be created.
      */
-    function _mint(address to, uint256 value)
-        internal
-        onlyIssuer
-        whenNotPaused
-    {
+    function _mint(address to, uint256 value) internal {
         require(to != address(0), "cannot mint to address zero");
         require(!_frozen[to], "address frozen");
 
