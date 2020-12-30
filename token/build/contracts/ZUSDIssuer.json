@@ -14819,7 +14819,7 @@
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2020-12-29T10:43:11.744Z",
+  "updatedAt": "2020-12-30T05:12:23.090Z",
   "devdoc": {
     "details": "This contract will be the issuer for ZUSD. It provides a check and balance on token issuance by requiring mints to be first proposed and a certain number of blocks to have passed before it can be executed. This gives other issuers a time to check that the issuance is valid and if not, reject the mint.",
     "methods": {

@@ -28202,7 +28202,7 @@
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2020-12-29T10:43:11.727Z",
+  "updatedAt": "2020-12-30T05:12:23.079Z",
   "devdoc": {
     "details": "This contract is a Pausable ERC20 token with issuance controlled by a central Issuer. By implementing ZUSDImplementation this contract also includes external methods for setting a new implementation contract for the Proxy. NOTE: The storage defined here will actually be held in the Proxy contract and all calls to this contract should be made through the proxy, including admin actions done as owner or issuer. Any call to transfer against this contract should fail since the contract is paused and there are no balances.",
     "methods": {
