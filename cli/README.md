@@ -19,7 +19,7 @@ $ npm install -g zusd
 $ zusd COMMAND
 running command...
 $ zusd (-v|--version|version)
-zusd/0.0.0 darwin-x64 node-v12.16.1
+zusd/0.0.0 darwin-x64 node-v15.4.0
 $ zusd --help [COMMAND]
 USAGE
   $ zusd COMMAND
@@ -28,28 +28,47 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`zusd hello [FILE]`](#zusd-hello-file)
+* [`zusd burn`](#zusd-burn)
 * [`zusd help [COMMAND]`](#zusd-help-command)
+* [`zusd issuer:member:add`](#zusd-issuermemberadd)
+* [`zusd issuer:member:list`](#zusd-issuermemberlist)
+* [`zusd issuer:member:remove`](#zusd-issuermemberremove)
+* [`zusd issuer:mint:list`](#zusd-issuermintlist)
+* [`zusd issuer:mint:propose`](#zusd-issuermintpropose)
+* [`zusd issuer:mint:reject`](#zusd-issuermintreject)
+* [`zusd issuer:mint:send`](#zusd-issuermintsend)
+* [`zusd supply`](#zusd-supply)
+* [`zusd transfer`](#zusd-transfer)
 
-## `zusd hello [FILE]`
-
-describe the command here
+## `zusd burn`
 
 ```
 USAGE
-  $ zusd hello [FILE]
+  $ zusd burn
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  --amount=amount              (required) The amount of burn (e.g. 154.23)
 
-EXAMPLE
-  $ zusd hello
-  hello world from ./src/hello.ts!
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/hello.ts)_
+_See code: [src/commands/burn.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/burn.ts)_
 
 ## `zusd help [COMMAND]`
 
@@ -67,4 +86,224 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `zusd issuer:member:add`
+
+```
+USAGE
+  $ zusd issuer:member:add
+
+OPTIONS
+  --address=address            (required) The new issuance member to add
+
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
+```
+
+_See code: [src/commands/issuer/member/add.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/member/add.ts)_
+
+## `zusd issuer:member:list`
+
+```
+USAGE
+  $ zusd issuer:member:list
+
+OPTIONS
+  --network=ropsten|mainnet  [default: ropsten] Ethereum network to use
+```
+
+_See code: [src/commands/issuer/member/list.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/member/list.ts)_
+
+## `zusd issuer:member:remove`
+
+```
+USAGE
+  $ zusd issuer:member:remove
+
+OPTIONS
+  --address=address            (required) The issuance member to remove
+
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
+```
+
+_See code: [src/commands/issuer/member/remove.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/member/remove.ts)_
+
+## `zusd issuer:mint:list`
+
+```
+USAGE
+  $ zusd issuer:mint:list
+
+OPTIONS
+  --network=ropsten|mainnet  [default: ropsten] Ethereum network to use
+```
+
+_See code: [src/commands/issuer/mint/list.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/mint/list.ts)_
+
+## `zusd issuer:mint:propose`
+
+```
+USAGE
+  $ zusd issuer:mint:propose
+
+OPTIONS
+  --amount=amount              (required) The amount of propose (e.g. 154.23)
+
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
+
+  --to=to                      The address to issue new tokens to, defaults to self
+```
+
+_See code: [src/commands/issuer/mint/propose.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/mint/propose.ts)_
+
+## `zusd issuer:mint:reject`
+
+```
+USAGE
+  $ zusd issuer:mint:reject
+
+OPTIONS
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --index=index                (required) The index of the pending mint to reject
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
+```
+
+_See code: [src/commands/issuer/mint/reject.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/mint/reject.ts)_
+
+## `zusd issuer:mint:send`
+
+```
+USAGE
+  $ zusd issuer:mint:send
+
+OPTIONS
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --index=index                (required) The index of the pending mint to send
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
+```
+
+_See code: [src/commands/issuer/mint/send.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/issuer/mint/send.ts)_
+
+## `zusd supply`
+
+```
+USAGE
+  $ zusd supply
+
+OPTIONS
+  --network=ropsten|mainnet  [default: ropsten] Ethereum network to use
+```
+
+_See code: [src/commands/supply.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/supply.ts)_
+
+## `zusd transfer`
+
+```
+USAGE
+  $ zusd transfer
+
+OPTIONS
+  --amount=amount              (required) The amount of transfer (e.g. 154.23)
+
+  --gaspricegwei=gaspricegwei  Override the default behavior of determining gas price based on previous few blocks by
+                               using a user specified gas price in Gwei. 1 Gwei is 1e9 Wei (a giga-wei).
+
+  --hdwpath=hdwpath            Specify a custom HD wallet derivation path, or just skip the prompt for non-interactive
+                               signing.
+
+  --network=ropsten|mainnet    [default: ropsten] Ethereum network to use
+
+  --nobroadcast                Sign but do not broadcast the transaction. Output the signed transaction to stdout.
+
+  --nonce=nonce                Override the default behavior of getting the next nonce by using a user specified nonce.
+                               Useful for retrying or queuing transactions.
+
+  --sigmethod=privkey|ledger   (required) Signature method for signing the transaction
+
+  --skipconfirm                Skip the confirmation and directly broadcast the transaction. Useful for non-interactive
+                               use.
+
+  --to=to                      (required) The recipient of the transferred tokens
+```
+
+_See code: [src/commands/transfer.ts](https://github.com/stablyio/zusd-ethereum/blob/v0.0.0/src/commands/transfer.ts)_
 <!-- commandsstop -->
