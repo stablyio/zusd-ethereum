@@ -79,18 +79,13 @@ abstract class EthCommand extends Command {
     this.error(`Unsupported network for fetching chain ID ${network}`);
   }
 
-  uint256ToDecimals(int: any): BN {
-    const ten = this.web3().utils.toBN(10);
-    const tokenDecimals = this.web3().utils.toBN(config.token.decimals);
-    const BNInput = this.web3().utils.toBN(int);
-    return BNInput.div(ten.pow(tokenDecimals));
+  // David's note: I really don't like how web3 uses BN, we should move to ethersjs in the next rewrite
+  uint256ToDecimals(int: any): number {
+    return int / Math.pow(10, config.token.decimals);
   }
 
   decimalsToUint256(dec: number): BN {
-    const ten = this.web3().utils.toBN(10);
-    const tokenDecimals = this.web3().utils.toBN(config.token.decimals);
-    const decimalInput = this.web3().utils.toBN(dec);
-    return decimalInput.mul(ten.pow(tokenDecimals));
+    return this.web3().utils.toBN(dec * Math.pow(10, config.token.decimals));
   }
 
   eventLogAddressToAddress(unclean: string): string {
